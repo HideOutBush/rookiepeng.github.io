@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="share life, share the programming">
+  <meta name="author" content="rookie0peng">
+  <meta name="keywords" content="">
+  <title>mysql字符串字段的字符集不同可能会导致索引不生效 - Fall and then rise</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Fall and then rise" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>rookie0peng's blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="mysql字符串字段的字符集不同可能会导致索引不生效">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-11-17 01:37" pubdate>
+        November 17, 2020 am
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.5k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      20
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">mysql字符串字段的字符集不同可能会导致索引不生效</h1>
+            
+            <div class="markdown-body">
+              <p>前言，在探索这个问题之前，我们需要了解 mysql 的一个基本概念。mysql 有三种数据类型，数值型、字符串型、日期型，其中字符串类型需要设置字符集。如果不设置，在创建表结构的时候会默认使用数据库的字符集。</p>
+<h3 id="1-准备两个测试表（test-a-test-b）。"><a href="#1-准备两个测试表（test-a-test-b）。" class="headerlink" title="1.准备两个测试表（test_a, test_b）。"></a>1.准备两个测试表（test_a, test_b）。</h3><pre><code class="hljs routeros">CREATE TABLE `test_a` (
+  `id` bigint <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> COMMENT <span class="hljs-string">&#x27;主键编号&#x27;</span>,
+  `test_bigint` bigint<span class="hljs-built_in"> DEFAULT </span><span class="hljs-literal">NULL</span> COMMENT <span class="hljs-string">&#x27;utf8的bigint&#x27;</span>,
+  `test_varchar_utf8` varchar(255)<span class="hljs-built_in"> DEFAULT </span><span class="hljs-literal">NULL</span> COMMENT <span class="hljs-string">&#x27;utf8的varchar&#x27;</span>,
+  `test_varchar_utf8mb4` varchar(255) CHARACTER <span class="hljs-builtin-name">SET</span> utf8mb4 COLLATE utf8mb4_general_ci<span class="hljs-built_in"> DEFAULT </span><span class="hljs-literal">NULL</span> COMMENT <span class="hljs-string">&#x27;utf8mb4的varchar&#x27;</span>,
+  PRIMARY KEY (`id`),
+  KEY `idx_test_bigint` (`test_bigint`) USING BTREE COMMENT <span class="hljs-string">&#x27;test_bigint索引&#x27;</span>,
+  KEY `idx_test_varchar_utf8` (`test_varchar_utf8`) USING BTREE COMMENT <span class="hljs-string">&#x27;test_varchar_utf8索引&#x27;</span>,
+  KEY `idx_test_varchar_utf8mb4` (`test_varchar_utf8mb4`) USING BTREE COMMENT <span class="hljs-string">&#x27;test_varchar_utf8mb4索引&#x27;</span>
+) <span class="hljs-attribute">ENGINE</span>=InnoDB<span class="hljs-built_in"> DEFAULT </span><span class="hljs-attribute">CHARSET</span>=utf8;
+
+CREATE TABLE `test_b` (
+  `id` bigint <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> COMMENT <span class="hljs-string">&#x27;主键编号&#x27;</span>,
+  `test_bigint` bigint<span class="hljs-built_in"> DEFAULT </span><span class="hljs-literal">NULL</span> COMMENT <span class="hljs-string">&#x27;utf8的bigint&#x27;</span>,
+  `test_varchar_utf8` varchar(255)<span class="hljs-built_in"> DEFAULT </span><span class="hljs-literal">NULL</span> COMMENT <span class="hljs-string">&#x27;utf8的varchar&#x27;</span>,
+  `test_varchar_utf8mb4` varchar(255) CHARACTER <span class="hljs-builtin-name">SET</span> utf8mb4 COLLATE utf8mb4_general_ci<span class="hljs-built_in"> DEFAULT </span><span class="hljs-literal">NULL</span> COMMENT <span class="hljs-string">&#x27;utf8的varchar&#x27;</span>,
+  PRIMARY KEY (`id`),
+  KEY `idx_test_bigint` (`test_bigint`) USING BTREE COMMENT <span class="hljs-string">&#x27;test_bigint索引&#x27;</span>,
+  KEY `idx_test_varchar_utf8` (`test_varchar_utf8`) USING BTREE COMMENT <span class="hljs-string">&#x27;test_varchar_utf8索引&#x27;</span>,
+  KEY `idx_test_varchar_utf8mb4` (`test_varchar_utf8mb4`) USING BTREE COMMENT <span class="hljs-string">&#x27;test_varchar_utf8mb4索引&#x27;</span>
+) <span class="hljs-attribute">ENGINE</span>=InnoDB<span class="hljs-built_in"> DEFAULT </span><span class="hljs-attribute">CHARSET</span>=utf8;</code></pre>
+<p><strong>注意：这两个表的 test_varchar_utf8 字段使用的是utf8字符集，test_varchar_utf8mb4 字段使用的是 utf8mb4 字符集。mysql 的 utf8 使用最大3字节长度来编码字符，而 utf8mb4 是使用最大4字节长度编码字符，可以理解为 utf8mb4 是 utf8 的超集。</strong></p>
+<h3 id="2-插入几条测试数据"><a href="#2-插入几条测试数据" class="headerlink" title="2.插入几条测试数据"></a>2.插入几条测试数据</h3><p>在 test_a 表中插入一条数据，在 test_b 表中插入10条数据。多少条数据无所谓，只需要能达到测试效果即可。</p>
+<pre><code class="hljs n1ql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_a`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-string">&#x27;1&#x27;</span>);
+
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_b`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-string">&#x27;1&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_b`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-string">&#x27;2&#x27;</span>, <span class="hljs-string">&#x27;2&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_b`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;3&#x27;</span>, <span class="hljs-string">&#x27;3&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_b`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">4</span>, <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;4&#x27;</span>, <span class="hljs-string">&#x27;4&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_b`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;5&#x27;</span>, <span class="hljs-string">&#x27;5&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_b`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">6</span>, <span class="hljs-number">6</span>, <span class="hljs-string">&#x27;6&#x27;</span>, <span class="hljs-string">&#x27;6&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_b`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">7</span>, <span class="hljs-number">7</span>, <span class="hljs-string">&#x27;7&#x27;</span>, <span class="hljs-string">&#x27;7&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_b`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">8</span>, <span class="hljs-number">8</span>, <span class="hljs-string">&#x27;8&#x27;</span>, <span class="hljs-string">&#x27;8&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_b`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">9</span>, <span class="hljs-number">9</span>, <span class="hljs-string">&#x27;9&#x27;</span>, <span class="hljs-string">&#x27;9&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> <span class="hljs-symbol">`test_b`</span>(<span class="hljs-symbol">`id`</span>, <span class="hljs-symbol">`test_bigint`</span>, <span class="hljs-symbol">`test_varchar_utf8`</span>, <span class="hljs-symbol">`test_varchar_utf8mb4`</span>) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-string">&#x27;10&#x27;</span>, <span class="hljs-string">&#x27;10&#x27;</span>);</code></pre>
+
+<h3 id="3-准备测试的-sql-语句，并执行"><a href="#3-准备测试的-sql-语句，并执行" class="headerlink" title="3.准备测试的 sql 语句，并执行"></a>3.准备测试的 sql 语句，并执行</h3><p>通过 test_a 表的数据关联查询 test_b 表的数据。</p>
+<pre><code class="hljs sql"><span class="hljs-comment">-- 测试非字符串类型的查询</span>
+<span class="hljs-keyword">EXPLAIN</span> <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> test_a ta <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> test_b tb <span class="hljs-keyword">ON</span> tb.test_bigint = ta.test_bigint <span class="hljs-keyword">WHERE</span> ta.test_bigint = <span class="hljs-number">1</span>;
+<span class="hljs-comment">-- 测试字符串类型，使用utf8编码的字段查询utf8编码的字段</span>
+<span class="hljs-keyword">EXPLAIN</span> <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> test_a ta <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> test_b tb <span class="hljs-keyword">ON</span> tb.test_varchar_utf8 = ta.test_varchar_utf8 <span class="hljs-keyword">WHERE</span> ta.test_varchar_utf8 = <span class="hljs-string">&#x27;1&#x27;</span>;
+<span class="hljs-comment">-- 测试字符串类型，使用utf8mb4编码的字段查询utf8编码的字段</span>
+<span class="hljs-keyword">EXPLAIN</span> <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> test_a ta <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> test_b tb <span class="hljs-keyword">ON</span> tb.test_varchar_utf8 = ta.test_varchar_utf8mb4 <span class="hljs-keyword">WHERE</span> ta.test_varchar_utf8 = <span class="hljs-string">&#x27;1&#x27;</span>;
+<span class="hljs-comment">-- 测试字符串类型，使用utf8编码的字段查询utf8mb4编码的字段</span>
+<span class="hljs-keyword">EXPLAIN</span> <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> test_a ta <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> test_b tb <span class="hljs-keyword">ON</span> tb.test_varchar_utf8mb4 = ta.test_varchar_utf8 <span class="hljs-keyword">WHERE</span> ta.test_varchar_utf8 = <span class="hljs-string">&#x27;1&#x27;</span>;
+<span class="hljs-comment">-- 测试字符串类型，使用utf8mb4编码的字段查询utf8mb4编码的字段</span>
+<span class="hljs-keyword">EXPLAIN</span> <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> test_a ta <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> test_b tb <span class="hljs-keyword">ON</span> tb.test_varchar_utf8mb4 = ta.test_varchar_utf8mb4 <span class="hljs-keyword">WHERE</span> ta.test_varchar_utf8 = <span class="hljs-string">&#x27;1&#x27;</span>;</code></pre>
+<p>以下是执行结果</p>
+<p><strong>结果1：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/d5d1c78846aa4832882f2e75b5523f2e.png" srcset="/img/loading.gif" alt="图 3-1.png"><br><strong>结果2：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/8ce85144b90144a3b63cf31b33281692.png" srcset="/img/loading.gif" alt="图 3-2.png"><br><strong>结果3：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/f70177102e47452c93de9664b78059aa.png" srcset="/img/loading.gif" alt="图 3-3.png"><br><strong>结果4：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/9638030ad8374fd8b8e62c7cbb062b2a.png" srcset="/img/loading.gif" alt="图 3-4.png"><br><strong>结果5：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/d07ae072b3814f7b9ae80163779130f9.png" srcset="/img/loading.gif" alt="图 3-5.png"></p>
+<h3 id="4-分析执行结果"><a href="#4-分析执行结果" class="headerlink" title="4.分析执行结果"></a>4.分析执行结果</h3><h5 id="4-1-对于-table-ta-的查询始终是走索引的"><a href="#4-1-对于-table-ta-的查询始终是走索引的" class="headerlink" title="4-1.对于 table ta 的查询始终是走索引的"></a>4-1.对于 table ta 的查询始终是走索引的</h5><p>观察5个结果中 table ta 的 key 字段，都是有值的。这说明了在使用 where 条件显式查询时，不管目标字段的字符集是什么，都会在查询的过程中默认使用该字符集进行编译，然后就可以走索引。</p>
+<h5 id="4-2-对于-table-tb-的查询，会因为字符集的不同导致不走索引"><a href="#4-2-对于-table-tb-的查询，会因为字符集的不同导致不走索引" class="headerlink" title="4-2.对于 table tb 的查询，会因为字符集的不同导致不走索引"></a>4-2.对于 table tb 的查询，会因为字符集的不同导致不走索引</h5><p>观察5个结果中的 table tb 的 key 字段，只有结果3的 key 字段为 null，再看看结果3的查询语句，使用 utf8mb4 编码的字段查询 utf8 编码的字段，联想开篇提到的内容，utf8mb4 是 utf8 的超集，那我们使用 utf8mb4 编码的字段去查询 utf8 编码的字段会出现不兼容的情况，没法走索引。</p>
+<h5 id="4-3-对于-table-tb-的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。"><a href="#4-3-对于-table-tb-的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。" class="headerlink" title="4-3. 对于 table tb 的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。"></a>4-3. 对于 table tb 的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。</h5><p>观察第4条 sql 语句，使用 utf8 编码的字段查询 utf8mb4 编码的字段，再看它的执行结果，table tb的 key 字段是有值的，代表走了索引，联想开篇提到的内容，utf8mb4 是 utf8 的超集，那么就可以理解为啥字符集不同也可以走索引了。</p>
+<h3 id="5-结论"><a href="#5-结论" class="headerlink" title="5.结论"></a>5.结论</h3><p>mysql 字符串字段的字符集不同可能会导致索引不生效</p>
+<h3 id="6-建议"><a href="#6-建议" class="headerlink" title="6.建议"></a>6.建议</h3><p>为了方便使用，还是统一数据库字符集比较好。<br>如果没法修改字段的字符集的话，也可以使用强转字符集的方式，让字段走索引。我们将第3条sql语句按照下面的方式进行调整。</p>
+<h5 id="6-1-将-utf8-强转成-utf8mb4，不走索引"><a href="#6-1-将-utf8-强转成-utf8mb4，不走索引" class="headerlink" title="6-1.将 utf8 强转成 utf8mb4，不走索引"></a>6-1.将 utf8 强转成 utf8mb4，不走索引</h5><p>将 utf8 强转成 utf8mb4 时，需要设置字符集的排序规则</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">EXPLAIN</span> <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> test_a ta <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> test_b tb <span class="hljs-keyword">ON</span> <span class="hljs-keyword">CONVERT</span>(tb.test_varchar_utf8 <span class="hljs-keyword">USING</span> utf8mb4) <span class="hljs-keyword">COLLATE</span> utf8mb4_general_ci = ta.test_varchar_utf8mb4 <span class="hljs-keyword">WHERE</span> ta.test_varchar_utf8mb4 = <span class="hljs-string">&#x27;1&#x27;</span>;</code></pre>
+<p><strong>执行结果如下：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/7c6fd6a54f3c4024bf636d31e263d1cc.png" srcset="/img/loading.gif" alt="图 6-1.png.png"><br>从图 6-1中可以看到，table tb 的 key 字段的值为 null，代表它没走索引。也就是说，将 utf8 强转成 utf8mb4，并不会走索引。</p>
+<h5 id="6-2-将-utf8mb4-强转成-utf8，走索引"><a href="#6-2-将-utf8mb4-强转成-utf8，走索引" class="headerlink" title="6-2.将 utf8mb4 强转成 utf8，走索引"></a>6-2.将 utf8mb4 强转成 utf8，走索引</h5><p>将 utf8mb4 强转成 utf8 时，不需要设置字符集的排序规则</p>
+<pre><code class="hljs sql"><span class="hljs-comment">-- 测试字符串类型，通过utf8mb4查询utf8，将utf8mb4强转成utf8</span>
+<span class="hljs-keyword">EXPLAIN</span> <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> test_a ta <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> test_b tb <span class="hljs-keyword">ON</span> tb.test_varchar_utf8 = <span class="hljs-keyword">CONVERT</span>(ta.test_varchar_utf8mb4 <span class="hljs-keyword">USING</span> utf8) <span class="hljs-keyword">WHERE</span> ta.test_varchar_utf8mb4 = <span class="hljs-string">&#x27;1&#x27;</span>;</code></pre>
+<p><strong>执行结果如下：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/f4e77a4a665845468e22db0a871209da.png" srcset="/img/loading.gif" alt="图 6-2.png"><br>从图 6-2中可见，table tb 的 key 字段是有值的，这代表它走了索引，完结撒花！</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/program/">program</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/mysql/">mysql</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/19/git-bash%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">git bash配置代理</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

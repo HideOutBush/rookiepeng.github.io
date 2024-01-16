@@ -18,12 +18,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.rookie0peng.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"bruceboron.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="前言，在探索这个问题之前，我们需要了解 mysql 的一个基本概念。mysql 有三种数据类型，数值型、字符串型、日期型，其中字符串类型需要设置字符集。如果不设置，在创建表结构的时候会默认使用数据库的字符集。 1.准备两个测试表（test_a, test_b）。123456789101112131415161718192021CREATE TABLE &#96;test_a&#96; (  &#96;id&#96; bigint">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql字符串字段的字符集不同可能会导致索引不生效">
-<meta property="og:url" content="https://blog.rookie0peng.com/2020/11/17/2020/11/mysql%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E6%AE%B5%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8D%E5%90%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E7%B4%A2%E5%BC%95%E4%B8%8D%E7%94%9F%E6%95%88/index.html">
+<meta property="og:url" content="https://bruceboron.com/2020/11/17/2020/11/mysql%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E6%AE%B5%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8D%E5%90%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E7%B4%A2%E5%BC%95%E4%B8%8D%E7%94%9F%E6%95%88/index.html">
 <meta property="og:site_name" content="Bruce Boron">
 <meta property="og:description" content="前言，在探索这个问题之前，我们需要了解 mysql 的一个基本概念。mysql 有三种数据类型，数值型、字符串型、日期型，其中字符串类型需要设置字符集。如果不设置，在创建表结构的时候会默认使用数据库的字符集。 1.准备两个测试表（test_a, test_b）。123456789101112131415161718192021CREATE TABLE &#96;test_a&#96; (  &#96;id&#96; bigint">
 <meta property="og:locale" content="en_US">
@@ -42,11 +42,11 @@
 <meta name="twitter:image" content="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/d5d1c78846aa4832882f2e75b5523f2e.png">
 
 
-<link rel="canonical" href="https://blog.rookie0peng.com/2020/11/17/2020/11/mysql%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E6%AE%B5%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8D%E5%90%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E7%B4%A2%E5%BC%95%E4%B8%8D%E7%94%9F%E6%95%88/">
+<link rel="canonical" href="https://bruceboron.com/2020/11/17/2020/11/mysql%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E6%AE%B5%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8D%E5%90%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E7%B4%A2%E5%BC%95%E4%B8%8D%E7%94%9F%E6%95%88/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.rookie0peng.com/2020/11/17/2020/11/mysql%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E6%AE%B5%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8D%E5%90%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E7%B4%A2%E5%BC%95%E4%B8%8D%E7%94%9F%E6%95%88/","path":"2020/11/17/2020/11/mysql字符串字段的字符集不同可能会导致索引不生效/","title":"mysql字符串字段的字符集不同可能会导致索引不生效"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://bruceboron.com/2020/11/17/2020/11/mysql%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E6%AE%B5%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8D%E5%90%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E7%B4%A2%E5%BC%95%E4%B8%8D%E7%94%9F%E6%95%88/","path":"2020/11/17/2020/11/mysql字符串字段的字符集不同可能会导致索引不生效/","title":"mysql字符串字段的字符集不同可能会导致索引不生效"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>mysql字符串字段的字符集不同可能会导致索引不生效 | Bruce Boron</title>
@@ -202,7 +202,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.rookie0peng.com/2020/11/17/2020/11/mysql%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E6%AE%B5%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8D%E5%90%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E7%B4%A2%E5%BC%95%E4%B8%8D%E7%94%9F%E6%95%88/">
+    <link itemprop="mainEntityOfPage" href="https://bruceboron.com/2020/11/17/2020/11/mysql%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E6%AE%B5%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8D%E5%90%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E7%B4%A2%E5%BC%95%E4%B8%8D%E7%94%9F%E6%95%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tzl-1.jpg">

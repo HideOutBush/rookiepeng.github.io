@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>借钱2 (测试用)</title>
-    <url>/2023/11/19/2024/%E5%80%9F%E9%92%B12/</url>
-    <content><![CDATA[<p>走在去健身房的路上，突然一短发背着双肩包的男子走了过来。</p>
-<p>男子：你好，可以借我十几块钱坐公交吗？我找工作把钱花光了。</p>
-<p>我：啊？（我有点懵，为啥这么多人不问，偏偏问我。）</p>
-<p>男子看我疑惑的的表情，又复述了一遍刚刚话。</p>
-<p>男子：我找工作把钱花光了，可以借我十几块钱坐公交吗？</p>
-<p>我：那个，前面100m就是地铁站，要不你去那找工作人员接济一下？</p>
-<p>男子低着头往相反方向走了，脸上带着失望。</p>
-<p align="right">2020-10-03</p>]]></content>
-      <categories>
-        <category>diary</category>
-      </categories>
-      <tags>
-        <tag>passerby</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>git bash配置代理</title>
     <url>/2020/11/19/2020/11/git-bash%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<h3 id="1-https加速"><a href="#1-https加速" class="headerlink" title="1.https加速"></a>1.https加速</h3><h5 id="1-1-当代理为http或https时"><a href="#1-1-当代理为http或https时" class="headerlink" title="1-1.当代理为http或https时"></a>1-1.当代理为http或https时</h5><p>1080为代理端口号。</p>
@@ -40,6 +22,24 @@
       </categories>
       <tags>
         <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>借钱2 (测试用)</title>
+    <url>/2023/11/19/2024/%E5%80%9F%E9%92%B12/</url>
+    <content><![CDATA[<p>走在去健身房的路上，突然一短发背着双肩包的男子走了过来。</p>
+<p>男子：你好，可以借我十几块钱坐公交吗？我找工作把钱花光了。</p>
+<p>我：啊？（我有点懵，为啥这么多人不问，偏偏问我。）</p>
+<p>男子看我疑惑的的表情，又复述了一遍刚刚话。</p>
+<p>男子：我找工作把钱花光了，可以借我十几块钱坐公交吗？</p>
+<p>我：那个，前面100m就是地铁站，要不你去那找工作人员接济一下？</p>
+<p>男子低着头往相反方向走了，脸上带着失望。</p>
+<p align="right">2020-10-03</p>]]></content>
+      <categories>
+        <category>diary</category>
+      </categories>
+      <tags>
+        <tag>passerby</tag>
       </tags>
   </entry>
   <entry>

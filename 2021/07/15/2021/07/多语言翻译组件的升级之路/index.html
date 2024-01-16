@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.rookie0peng.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="国际化的定义各不相同。这是用于 W3C 国际化活动材料的高级工作定义。有些人使用其他术语（例如全球化）来指代同一概念。国际化是产品、应用程序或文档内容的设计和开发，它可以为不同文化、地区或语言的目标受众轻松本地化。国际化（Internationalization）通常用英文写成i18n，其中 18 是英文单词中i和n之间的字母数。[1] 本文主要基于java针对语言国际化进行阐述。 任何一个面向全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多语言翻译组件的升级之路">
+<meta property="og:url" content="https://blog.rookie0peng.cn/2021/07/15/2021/07/%E5%A4%9A%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8D%87%E7%BA%A7%E4%B9%8B%E8%B7%AF/index.html">
+<meta property="og:site_name" content="Bruce Boron">
+<meta property="og:description" content="国际化的定义各不相同。这是用于 W3C 国际化活动材料的高级工作定义。有些人使用其他术语（例如全球化）来指代同一概念。国际化是产品、应用程序或文档内容的设计和开发，它可以为不同文化、地区或语言的目标受众轻松本地化。国际化（Internationalization）通常用英文写成i18n，其中 18 是英文单词中i和n之间的字母数。[1] 本文主要基于java针对语言国际化进行阐述。 任何一个面向全">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7316408-709b2c3aab575f69.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7316408-440df83c13f12bd4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7316408-da3da3c43add31a0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2021-07-14T19:43:26.000Z">
+<meta property="article:modified_time" content="2024-01-16T06:29:29.984Z">
+<meta property="article:author" content="Bruce Boron(rookie0peng)">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7316408-709b2c3aab575f69.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<link rel="canonical" href="https://blog.rookie0peng.cn/2021/07/15/2021/07/%E5%A4%9A%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8D%87%E7%BA%A7%E4%B9%8B%E8%B7%AF/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.rookie0peng.cn/2021/07/15/2021/07/%E5%A4%9A%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8D%87%E7%BA%A7%E4%B9%8B%E8%B7%AF/","path":"2021/07/15/2021/07/多语言翻译组件的升级之路/","title":"多语言翻译组件的升级之路"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>多语言翻译组件的升级之路 | Bruce Boron</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="blog-v2-theta-seven.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Bruce Boron</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">rookie0peng</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8spring%E8%87%AA%E5%B8%A6%E7%9A%84i18n%EF%BC%88%E5%9B%BD%E9%99%85%E5%8C%96%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">1.使用spring自带的i18n（国际化）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-%E5%9C%A8properties%E6%88%96yml%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E9%87%8C%E9%9D%A2%E9%85%8D%E7%BD%AEi18n"><span class="nav-number">1.0.1.</span> <span class="nav-text">1-1.在properties或yml资源文件里面配置i18n</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-%E5%9C%A8resources%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E6%96%B0%E5%A2%9Ei18n%E6%96%87%E4%BB%B6%E5%A4%B9%EF%BC%8C%E5%B9%B6%E6%96%B0%E5%BB%BA%E7%9B%B8%E5%BA%94%E7%9A%84%E5%9B%BD%E9%99%85%E5%8C%96%E6%96%87%E4%BB%B6"><span class="nav-number">1.0.2.</span> <span class="nav-text">1-2.在resources文件夹下新增i18n文件夹，并新建相应的国际化文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-%E5%9C%A8%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8i18n%E8%BF%9B%E8%A1%8C%E5%9B%BD%E9%99%85%E5%8C%96"><span class="nav-number">1.0.3.</span> <span class="nav-text">1-3.在代码中使用i18n进行国际化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-4-%E6%B5%8B%E8%AF%95spring-i18n"><span class="nav-number">1.0.4.</span> <span class="nav-text">1-4.测试spring i18n</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-5-%E5%88%86%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">1.0.5.</span> <span class="nav-text">1-5.分析执行结果</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-6-%E7%BB%93%E8%AE%BA"><span class="nav-number">1.0.6.</span> <span class="nav-text">1-6.结论</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%87%AA%E5%AE%9A%E4%B9%89i18n"><span class="nav-number">2.</span> <span class="nav-text">2.自定义i18n</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-%E8%AE%BE%E8%AE%A1%E6%95%B0%E6%8D%AE%E8%A1%A8"><span class="nav-number">2.0.1.</span> <span class="nav-text">2-1.设计数据表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-%E6%95%B0%E6%8D%AE%E7%BC%93%E5%AD%98%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.0.2.</span> <span class="nav-text">2-2.数据缓存设计</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-%E5%B0%86%E6%9B%BF%E6%8D%A2%E9%80%BB%E8%BE%91%E5%B5%8C%E5%85%A5spring%E7%9A%84filter%E6%88%96%E8%80%85%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-number">2.0.3.</span> <span class="nav-text">2-3.将替换逻辑嵌入spring的filter或者序列化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4-%E6%B5%8B%E8%AF%95%E8%87%AA%E5%AE%9A%E4%B9%89i18n"><span class="nav-number">2.0.4.</span> <span class="nav-text">2-4.测试自定义i18n</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-5-%E5%88%86%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">2.0.5.</span> <span class="nav-text">2-5.分析执行结果</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-6-%E7%BB%93%E8%AE%BA"><span class="nav-number">2.0.6.</span> <span class="nav-text">2-6.结论</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">3.总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number"></span> <span class="nav-text">参考</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bruce Boron(rookie0peng)"
+      src="/images/tzl-1.jpg">
+  <p class="site-author-name" itemprop="name">Bruce Boron(rookie0peng)</p>
+  <div class="site-description" itemprop="description">Programming: python, java, js, chatgpt. <br> Essay: strange stories and gossip.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.rookie0peng.cn/2021/07/15/2021/07/%E5%A4%9A%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8D%87%E7%BA%A7%E4%B9%8B%E8%B7%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tzl-1.jpg">
+      <meta itemprop="name" content="Bruce Boron(rookie0peng)">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bruce Boron">
+      <meta itemprop="description" content="Programming: python, java, js, chatgpt. <br> Essay: strange stories and gossip.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="多语言翻译组件的升级之路 | Bruce Boron">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          多语言翻译组件的升级之路
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-07-15 03:43:26" itemprop="dateCreated datePublished" datetime="2021-07-15T03:43:26+08:00">2021-07-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-01-16 14:29:29" itemprop="dateModified" datetime="2024-01-16T14:29:29+08:00">2024-01-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/program/" itemprop="url" rel="index"><span itemprop="name">program</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2021/07/15/2021/07/%E5%A4%9A%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8D%87%E7%BA%A7%E4%B9%8B%E8%B7%AF/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2021/07/15/2021/07/%E5%A4%9A%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8D%87%E7%BA%A7%E4%B9%8B%E8%B7%AF/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>国际化的定义各不相同。这是用于 W3C 国际化活动材料的高级工作定义。有些人使用其他术语（例如全球化）来指代同一概念。<br>国际化是产品、应用程序或文档内容的设计和开发，它可以为不同文化、地区或语言的目标受众轻松本地化。<br>国际化（Internationalization）通常用英文写成i18n，其中 18 是英文单词中i和n之间的字母数。<sup>[1]</sup></p>
+<p>本文主要基于java针对语言国际化进行阐述。</p>
+<p>任何一个面向全世界的软件都会面临多语言国际化的问题，对于java web应用，要实现国际化功能，就是在数据展示给用户之前，替换成对应的语言。</p>
+<span id="more"></span>
+
+<h3 id="1-使用spring自带的i18n（国际化）"><a href="#1-使用spring自带的i18n（国际化）" class="headerlink" title="1.使用spring自带的i18n（国际化）"></a>1.使用spring自带的i18n（国际化）</h3><p>这个比较简单，在网上找一找到处都是教程，这里将会手动配置一次spring i18n国际化来介绍一下。<br>以下是笔者使用的spring boot版本号.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starters&lt;/artifactId&gt;</span><br><span class="line">&lt;version&gt;2.2.5.RELEASE&lt;/version&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="1-1-在properties或yml资源文件里面配置i18n"><a href="#1-1-在properties或yml资源文件里面配置i18n" class="headerlink" title="1-1.在properties或yml资源文件里面配置i18n"></a>1-1.在properties或yml资源文件里面配置i18n</h5><p>笔者用的是yml文件，可以自行转换成properties文件格式。</p>
+<ul>
+<li><strong>basename：</strong>以逗号分隔的基名列表(本质上是一个完全限定的类路径位置)，每个基名都遵循ResourceBundle约定，对基于斜杠的位置提供宽松的支持。 如果它不包含包限定符(例如“org.mypackage”)，它将从类路径根目录解析。</li>
+<li><strong>cache-duration：</strong>加载的资源包文件缓存持续时间。 如果没有设置，捆绑包将被永久缓存。 如果没有指定持续时间后缀，将使用秒。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># i18n</span><br><span class="line">spring:</span><br><span class="line">  messages:</span><br><span class="line">    basename: i18n/messages</span><br><span class="line">    cache-duration: 60</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="1-2-在resources文件夹下新增i18n文件夹，并新建相应的国际化文件"><a href="#1-2-在resources文件夹下新增i18n文件夹，并新建相应的国际化文件" class="headerlink" title="1-2.在resources文件夹下新增i18n文件夹，并新建相应的国际化文件"></a>1-2.在resources文件夹下新增i18n文件夹，并新建相应的国际化文件</h5><p>spring容器启动的时候，会根据配置的basename去对应的路径加载资源文件到MessageSource里，至于是怎么加载到MessageSource里的，在这里就不展开阐述了。</p>
+<p>文件配置如图 1-1所示。</p>
+<p><strong>注意：红色框 里的就是i18n资源文件的配置，绿色框 是idea自动生成的文件夹，实际并不存在，无视就行。</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7316408-709b2c3aab575f69.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图 1-1  i18n资源文件.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># messages.properties</span><br><span class="line">test.name=test rookie0peng</span><br><span class="line">test.string=test string &#123;0&#125;</span><br><span class="line">test.date=test date &#123;0, date&#125;</span><br><span class="line">test.time=test time &#123;0, time&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># messages_en.properties</span><br><span class="line">test.name=test rookie0peng</span><br><span class="line">test.string=test string &#123;0&#125;</span><br><span class="line">test.date=test date &#123;0, date&#125;</span><br><span class="line">test.time=test time &#123;0, time&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># messages_zh.properties</span><br><span class="line">test.name=测试阿鹏</span><br><span class="line">test.string=测试字符串&#123;0&#125;</span><br><span class="line">test.date=测试日期&#123;0, date&#125;</span><br><span class="line">test.time=测试时间&#123;0, time&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="1-3-在代码中使用i18n进行国际化"><a href="#1-3-在代码中使用i18n进行国际化" class="headerlink" title="1-3.在代码中使用i18n进行国际化"></a>1-3.在代码中使用i18n进行国际化</h5><p>这里演示的是比较简单的手动参数替换，还有更好一些的方法，比如说在响应数据写入流的时候进行参数替换。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;test&quot;)</span><br><span class="line">public class TestController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private MessageSource messageSource;</span><br><span class="line"></span><br><span class="line">    @ApiOperation(value = &quot;随便打印数据&quot;)</span><br><span class="line">    @RequestMapping(path = &quot;console&quot;, method = RequestMethod.POST)</span><br><span class="line">    public Map&lt;String, String&gt; console() &#123;</span><br><span class="line">        Map&lt;String, String&gt; map = new LinkedHashMap&lt;&gt;();</span><br><span class="line">        //1.测试无参替换</span><br><span class="line">        map.put(&quot;test.name&quot;, messageSource.getMessage(&quot;test.name&quot;, null, LocaleContextHolder.getLocale()));</span><br><span class="line">        //2.测试字符串参数替换</span><br><span class="line">        Object[] stringParam = new Object[] &#123;&quot;1&quot;&#125;;</span><br><span class="line">        map.put(&quot;test.string&quot;, messageSource.getMessage(&quot;test.string&quot;, stringParam, LocaleContextHolder.getLocale()));</span><br><span class="line">        //3.测试日期参数替换</span><br><span class="line">        Object[] dateParam = new Object[] &#123;new Date()&#125;;</span><br><span class="line">        map.put(&quot;test.date&quot;, messageSource.getMessage(&quot;test.date&quot;, dateParam, LocaleContextHolder.getLocale()));</span><br><span class="line">        //3.测试时间参数替换</span><br><span class="line">        Object[] timeParam = new Object[] &#123;new Date()&#125;;</span><br><span class="line">        map.put(&quot;test.time&quot;, messageSource.getMessage(&quot;test.time&quot;, timeParam, LocaleContextHolder.getLocale()));</span><br><span class="line">        return map;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="1-4-测试spring-i18n"><a href="#1-4-测试spring-i18n" class="headerlink" title="1-4.测试spring i18n"></a>1-4.测试spring i18n</h5><p>启动项目后，查看调用**&#x2F;test&#x2F;console**接口返回的数据，调用三次，分别设置header中的语言：默认、中文、英文。<br>笔者用的是idea的HTTP Client，以下是请求参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">### 默认——测试spring i18n</span><br><span class="line">POST &#123;&#123;baseUrl&#125;&#125;/test/console</span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">### 中文——测试spring i18n</span><br><span class="line">POST &#123;&#123;baseUrl&#125;&#125;/test/console</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">### 英文——测试spring i18n</span><br><span class="line">POST &#123;&#123;baseUrl&#125;&#125;/test/console</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Accept-Language: en;q=0.9</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下是响应参数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;test.name&quot;: &quot;测试阿鹏&quot;,</span><br><span class="line">  &quot;test.string&quot;: &quot;测试字符串1&quot;,</span><br><span class="line">  &quot;test.date&quot;: &quot;测试日期2021年7月3日&quot;,</span><br><span class="line">  &quot;test.time&quot;: &quot;测试时间下午4:41:27&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;test.name&quot;: &quot;测试阿鹏&quot;,</span><br><span class="line">  &quot;test.string&quot;: &quot;测试字符串1&quot;,</span><br><span class="line">  &quot;test.date&quot;: &quot;测试日期2021年7月3日&quot;,</span><br><span class="line">  &quot;test.time&quot;: &quot;测试时间下午4:41:27&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;test.name&quot;: &quot;test rookie0peng&quot;,</span><br><span class="line">  &quot;test.string&quot;: &quot;test string 1&quot;,</span><br><span class="line">  &quot;test.date&quot;: &quot;test date Jul 3, 2021&quot;,</span><br><span class="line">  &quot;test.time&quot;: &quot;test time 4:41:32 PM&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="1-5-分析执行结果"><a href="#1-5-分析执行结果" class="headerlink" title="1-5.分析执行结果"></a>1-5.分析执行结果</h5><ul>
+<li>1-5-1.<strong>测试默认</strong>和<strong>测试中文</strong>的响应数据是一样的，可以确定系统默认使用的中文环境。</li>
+<li>1-5-2.调用getMessage()方法时，不传第2个参数就是无参替换；否则，反之。</li>
+<li>1-5-3.使用有参替换时，还可以在properties文件里加入date、time等参数，spring可以自动格式化成对应的日期和时间。</li>
+</ul>
+<h5 id="1-6-结论"><a href="#1-6-结论" class="headerlink" title="1-6.结论"></a>1-6.结论</h5><p>这里只是简单的演示了spring i18n的功能，对于一些简单的场景已然满足需要，如果需要进行扩展的话，有几种思路。</p>
+<ul>
+<li>1-6-1.如果使用了nacos等配置中心，则需要去注册中心手动拉取i18n的properties文件内容，并加载到应用程序的内存里，也可以在本地用户文件夹存放一份。</li>
+<li>1-6-2.如果需要一些正则翻译的话，则需要自己动手写正则替换的表达式。</li>
+<li>1-6-3.该例子展示的是在controller里进行替换，更好一点的方式是在filter，甚至是在响应数据写入流的时候进行替换，比如说指定某个响应对象的某个属性的序列化类（@JsonSerialize(using &#x3D; TestJsonSerializer.class)），则该字段序列化的时候就会使用TestJsonSerializer.class进行序列化。在这个类里面就可以针对性的做我们想要的替换了。</li>
+</ul>
+<h3 id="2-自定义i18n"><a href="#2-自定义i18n" class="headerlink" title="2.自定义i18n"></a>2.自定义i18n</h3><p>spring i18n是挺好用的，但是面对复杂的业务需求，还不够强大。比如，用户想添加一种语言；递归替换；布局可以自定义，用户添加布局字段时，针对该项目或组织的不同地区的人员，设置不同的翻译内容等等。</p>
+<p>基于各种各样的原因，扩展i18n已是必须要做的事。</p>
+<p>那么怎么扩展呢？国际化的本质就是将key替换成不同语言的value，这句话中有几个关键点：key、替换、语言、value。其中<strong>key</strong>、<strong>语言</strong>、<strong>value</strong>都是名词，代表着具体的数据；<strong>替换</strong>是动词，代表具体的翻译逻辑。那我们就需要针对这几个点进行设计与实现。</p>
+<h5 id="2-1-设计数据表"><a href="#2-1-设计数据表" class="headerlink" title="2-1.设计数据表"></a>2-1.设计数据表</h5><p>思路：通过一种语言和键找到对应的值。表结构设计比较简单，key、value、语言各建一个表，如图 2-1所示。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7316408-440df83c13f12bd4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图 2-1  国际化表结构设计.png"></p>
+<p>其中每个表只展示了主键编号字段，其实还有一些字段没展示出来，比如code、name，这些可以根据自己的风格去设计。如果是多租户的系统，在每张表后面加入对应的租户id，即可进行数据隔离。</p>
+<ul>
+<li>2-1-1.如果用户新增的字段需要翻译，往<strong>语言键</strong>里增加一条数据，以及往<strong>语言值</strong>里增加与<strong>语言定义</strong>相同数量的记录即可。</li>
+<li>2-1-2.如果用户新增<strong>语言定义</strong>，则往<strong>语言值</strong>里面增加与<strong>语言键</strong>相同数量的记录即可。</li>
+<li>2-1-3.更新、删除同理。</li>
+</ul>
+<h5 id="2-2-数据缓存设计"><a href="#2-2-数据缓存设计" class="headerlink" title="2-2.数据缓存设计"></a>2-2.数据缓存设计</h5><p>在一个面向世界的应用里面，翻译的频率是很高的，而且随着时间的流逝，翻译的数据肯定会越来越多，如果每次响应数据的翻译都去查询数据库的话，那势必会造成数据库性能以及应用本身性能的浪费。对于这种修改频率不算高的数据，咱们可以缓存起来，用空间换时间。</p>
+<p>这里打算用两级缓存的设计来适应该翻译场景，一级是redis，二级是应用内存。</p>
+<ul>
+<li>2-2-1.将用到的数据从数据库缓存在redis里面，并且生成一个更新标志放入redis。</li>
+<li>2-2-2.应用获取翻译数据的时候先判断redis更新标志是否为空。<ul>
+<li>2-2-2-1.为空，则代表redis尚未缓存翻译数据，将翻译数据从数据库拉取到内存，且推送到redis。</li>
+<li>2-2-2-2.不为空，则代表redis已缓存翻译数据，然后再比对redis的更新标志和应用内存的更新标志是否一致。<ul>
+<li>2-2-2-2-1.不一致，则说明翻译数据已经改变，需要从redis重新拉取一次翻译数据，缓存在应用内存中。</li>
+<li>2-2-2-2-2.一致，则说明翻译数据尚未改变，可以直接使用应用内存中的翻译数据。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>2-2-3.将最后拿到的翻译数据（key-value）返回给实现翻译逻辑的组件。</li>
+</ul>
+<p>如图 2-2所示。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7316408-da3da3c43add31a0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图 2-2  国际化两级缓存设计.png"></p>
+<p>代码如下所示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> *  @description: 语言数据组件</span><br><span class="line"> *  @author: rookie0peng</span><br><span class="line"> *  @date: 2021/7/4 21:28</span><br><span class="line"> *  &lt;/pre&gt;</span><br><span class="line"> */</span><br><span class="line">public interface LanguageDataComponent &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 通过语言定义和键获取值</span><br><span class="line">     * @param definition 语言定义</span><br><span class="line">     * @param key 键</span><br><span class="line">     * @return optional -&gt; 值</span><br><span class="line">     */</span><br><span class="line">    Optional&lt;String&gt; getValue(String definition, String key);</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 更新语言键值对映射</span><br><span class="line">     * @param definition 语言定义</span><br><span class="line">     */</span><br><span class="line">    void updateKeyValueMap(String definition);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line">@Service(&quot;languageDataComponent&quot;)</span><br><span class="line">public class LanguageDataComponentImpl implements LanguageDataComponent &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 语言定义 -&gt; (key, value)</span><br><span class="line">     */</span><br><span class="line">    private static final Map&lt;String, Map&lt;String, String&gt;&gt; DEFINITION_TO_KEY_VALUE_MAP = new ConcurrentHashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 一天</span><br><span class="line">     */</span><br><span class="line">    private static final long ONE_DAY = 86400;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 更新标志</span><br><span class="line">     */</span><br><span class="line">    private static final String CHANGE_FLAG = &quot;CHANGE_FLAG&quot;;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private RedisTemplate&lt;String, ?&gt; redisTemplate;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Optional&lt;String&gt; getValue(String definition, String key) &#123;</span><br><span class="line">        if (isEmpty(definition) || isEmpty(key))</span><br><span class="line">            return Optional.empty();</span><br><span class="line">        Map&lt;String, String&gt; key2ValueMap = DEFINITION_TO_KEY_VALUE_MAP.get(definition);</span><br><span class="line">        return isNull(key2ValueMap) ? Optional.empty() : Optional.ofNullable(key2ValueMap.get(key));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void updateKeyValueMap(String definition) &#123;</span><br><span class="line">        if (isEmpty(definition))</span><br><span class="line">            return;</span><br><span class="line">        //1.获取redis更新标志和本地更新标志</span><br><span class="line">        String redisChangeFlag = this.getRedisChangeFlag(definition);</span><br><span class="line">        String localChangeFlag = this.getLocalChangeFlag(definition);</span><br><span class="line">        //2.redis更新标志为空，则从数据库获取数据并分别推送到redis和应用内存，注意缓存击穿、缓存穿透和缓存雪崩的情况</span><br><span class="line">        if (isEmpty(redisChangeFlag)) &#123;</span><br><span class="line">            this.deleteByKey(definition);</span><br><span class="line">            this.getAndPutAllData(definition);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        //3.如果不相等，则从redis拉取数据并保存到应用内存</span><br><span class="line">        if (!redisChangeFlag.equals(localChangeFlag)) &#123;</span><br><span class="line">            Map&lt;String, String&gt; key2ValueMap = redisTemplate.opsForHash()</span><br><span class="line">                    .entries(definition).entrySet().stream()</span><br><span class="line">                    .collect(Collectors.toMap(entry -&gt; objectToString(entry.getKey()),</span><br><span class="line">                            entry -&gt; objectToString(entry.getValue())));</span><br><span class="line">            DEFINITION_TO_KEY_VALUE_MAP.put(definition, key2ValueMap);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取redis的更新标志</span><br><span class="line">     * @param definition 语言定义</span><br><span class="line">     * @return redis的更新标志</span><br><span class="line">     */</span><br><span class="line">    private String getRedisChangeFlag(String definition) &#123;</span><br><span class="line">        Object o = redisTemplate.opsForHash().get(definition, CHANGE_FLAG);</span><br><span class="line">        return StringUtil.objectToString(o);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取本地更新标志</span><br><span class="line">     * @param definition 语言定义</span><br><span class="line">     * @return 本地的更新标志</span><br><span class="line">     */</span><br><span class="line">    private String getLocalChangeFlag(String definition) &#123;</span><br><span class="line">        Map&lt;String, String&gt; key2ValueMap = DEFINITION_TO_KEY_VALUE_MAP.get(definition);</span><br><span class="line">        return isNull(key2ValueMap) ? null : key2ValueMap.get(CHANGE_FLAG);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 通过语言定义删除数据</span><br><span class="line">     * @param definition 语言定义</span><br><span class="line">     */</span><br><span class="line">    private void deleteByKey(String definition) &#123;</span><br><span class="line">        redisTemplate.delete(definition);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取与推送翻译数据</span><br><span class="line">     * @param definition 语言定义</span><br><span class="line">     * @return 翻译数据</span><br><span class="line">     */</span><br><span class="line">    private Map&lt;String, String&gt; getAndPutAllData(String definition) &#123;</span><br><span class="line">        //1.从数据库查询翻译数据</span><br><span class="line">        Map&lt;String, String&gt; databaseKeyValueMap = this.getLanguageDataFromDatabase(definition);</span><br><span class="line">        Map&lt;String, String&gt; key2ValueMap = isEmpty(databaseKeyValueMap) ? new ConcurrentHashMap&lt;&gt;()</span><br><span class="line">                : new ConcurrentHashMap&lt;&gt;(databaseKeyValueMap);</span><br><span class="line">        //2.设置更新标志</span><br><span class="line">        key2ValueMap.put(CHANGE_FLAG, UUIDUtil.randomUUID());</span><br><span class="line">        //3.将数据推送到redis</span><br><span class="line">        byte[] byteKey = definition.getBytes(StandardCharsets.UTF_8);</span><br><span class="line">        Map&lt;byte[], byte[]&gt; byteMap = key2ValueMap.entrySet().stream()</span><br><span class="line">                .collect(Collectors.toMap(</span><br><span class="line">                        entry -&gt; entry.getKey().getBytes(StandardCharsets.UTF_8),</span><br><span class="line">                        entry -&gt; entry.getValue().getBytes(StandardCharsets.UTF_8)));</span><br><span class="line">        redisTemplate.executePipelined((RedisCallback&lt;Object&gt;) connection -&gt; &#123;</span><br><span class="line">            connection.hMSet(byteKey, byteMap);</span><br><span class="line">            return null;</span><br><span class="line">        &#125;);</span><br><span class="line">        Long expire = redisTemplate.getExpire(definition);</span><br><span class="line">        if (expire == null || expire &lt; 300L)</span><br><span class="line">            redisTemplate.expire(definition, ONE_DAY, TimeUnit.SECONDS);</span><br><span class="line">        //4.将数据放到应用内存</span><br><span class="line">        DEFINITION_TO_KEY_VALUE_MAP.put(definition, key2ValueMap);</span><br><span class="line">        return key2ValueMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 从数据库获取数据</span><br><span class="line">     * @param definition 语言定义</span><br><span class="line">     * @return 数据</span><br><span class="line">     */</span><br><span class="line">    private Map&lt;String, String&gt; getLanguageDataFromDatabase(String definition) &#123;</span><br><span class="line">        //TODO 补充从数据库查询的代码</span><br><span class="line">        Map&lt;String, String&gt; map = new ConcurrentHashMap&lt;&gt;();</span><br><span class="line">        if (Locale.SIMPLIFIED_CHINESE.toLanguageTag().equals(definition)) &#123;</span><br><span class="line">            map.put(&quot;test.key1&quot;, &quot;这是第一个值&quot;);</span><br><span class="line">            map.put(&quot;test.key2&quot;, &quot;这是第二个值&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            map.put(&quot;test.key1&quot;, &quot;the first value&quot;);</span><br><span class="line">            map.put(&quot;test.key2&quot;, &quot;the second value&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        return map;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-3-将替换逻辑嵌入spring的filter或者序列化"><a href="#2-3-将替换逻辑嵌入spring的filter或者序列化" class="headerlink" title="2-3.将替换逻辑嵌入spring的filter或者序列化"></a>2-3.将替换逻辑嵌入spring的filter或者序列化</h5><p>笔者在这里只演示简单的key-&gt;value替换，至于递归替换、正则替换可以自行考虑加上。</p>
+<ul>
+<li>2-3-1.当一个请求进来的时候，首先需要做一些前置处理。<ul>
+<li>2-3-1-1.根据请求的语言设置当前线程的语言环境。</li>
+<li>2-3-1-2.更新一次当前应用内存的语言缓存数据。</li>
+</ul>
+</li>
+<li>2-3-2.当返回响应的时候，通过序列化对响应数据进行替换。</li>
+</ul>
+<p>代码如下所示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> *  @description: 语言对象</span><br><span class="line"> *  @author: rookie0peng</span><br><span class="line"> *  @date: 2021/1/18 17:17</span><br><span class="line"> *  &lt;/pre&gt;</span><br><span class="line"> */</span><br><span class="line">public class Language &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 语言编码, 默认中文简体</span><br><span class="line">     */</span><br><span class="line">    private String localeTag;</span><br><span class="line"></span><br><span class="line">    public Language() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Language(String localeTag) &#123;</span><br><span class="line">        this.localeTag = localeTag;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getLocaleTag() &#123;</span><br><span class="line">        return localeTag;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setLocaleTag(String localeTag) &#123;</span><br><span class="line">        this.localeTag = localeTag;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;Language&#123;&quot; +</span><br><span class="line">                &quot;localeTag=&#x27;&quot; + localeTag + &#x27;\&#x27;&#x27; +</span><br><span class="line">                &#x27;&#125;&#x27;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> *  @description: 基于线程上下文的语言工具类</span><br><span class="line"> *  @author: rookie0peng</span><br><span class="line"> *  @date: 2021/1/18 17:16</span><br><span class="line"> *  &lt;/pre&gt;</span><br><span class="line"> */</span><br><span class="line">public class LanguageContextUtil &#123;</span><br><span class="line"></span><br><span class="line">    private static final ThreadLocal&lt;Language&gt; CONTEXT = new ThreadLocal&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 设置语言信息</span><br><span class="line">     * @param language 语言信息</span><br><span class="line">     */</span><br><span class="line">    public static void set(Language language) &#123;</span><br><span class="line">        CONTEXT.set(language);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取语言信息</span><br><span class="line">     * @return 语言信息</span><br><span class="line">     */</span><br><span class="line">    public static Language get() &#123;</span><br><span class="line">        return CONTEXT.get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 移除语言信息</span><br><span class="line">     */</span><br><span class="line">    public static void remove() &#123;</span><br><span class="line">        CONTEXT.remove();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> *  @description: 语言过滤器</span><br><span class="line"> *  @author: rookie0peng</span><br><span class="line"> *  @date: 2021/1/18 17:16</span><br><span class="line"> *  &lt;/pre&gt;</span><br><span class="line"> */</span><br><span class="line">@Component</span><br><span class="line">public class LanguageFilter implements Filter &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private LanguageDataComponent languageDataComponent;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span><br><span class="line">            throws IOException, ServletException &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            //1.设置当前线程的语言环境</span><br><span class="line">            String localeTag;</span><br><span class="line">            Locale locale = servletRequest.getLocale();</span><br><span class="line">            LanguageContextUtil.set(isNull(locale) || isNull(localeTag = locale.toLanguageTag())</span><br><span class="line">                    ? new Language(Locale.SIMPLIFIED_CHINESE.toLanguageTag()) : new Language(localeTag));</span><br><span class="line">            //2.更新语言数据</span><br><span class="line">            languageDataComponent.updateKeyValueMap(LanguageContextUtil.get().getLocaleTag());</span><br><span class="line">            filterChain.doFilter(servletRequest, servletResponse);</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            LanguageContextUtil.remove();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> *  @description: i18n序列化</span><br><span class="line"> *  @author: rookie0peng</span><br><span class="line"> *  @date: 2021/7/4 21:28</span><br><span class="line"> *  &lt;/pre&gt;</span><br><span class="line"> */</span><br><span class="line">public class I18nJsonSerializer&lt;T&gt; extends JsonSerializer&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void serialize(T t, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException &#123;</span><br><span class="line">        //1.获取语言组件</span><br><span class="line">        LanguageDataComponent languageDataComponent = SpringUtil.getBean(LanguageDataComponent.class);</span><br><span class="line">        //2.通过 语言标志 和 键 获取对应的 值</span><br><span class="line">        Optional&lt;String&gt; valueOptional = languageDataComponent.getValue(LanguageContextUtil.get().getLocaleTag(),</span><br><span class="line">                StringUtil.objectToString(t));</span><br><span class="line">        //3.写入流</span><br><span class="line">        if (valueOptional.isPresent())</span><br><span class="line">            jsonGenerator.writeString(valueOptional.get());</span><br><span class="line">        else</span><br><span class="line">            jsonGenerator.writeString(StringUtil.objectToString(t));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">public class TestTranslateVO implements Serializable &#123;</span><br><span class="line"></span><br><span class="line">    private static final long serialVersionUID = -273426001439788094L;</span><br><span class="line"></span><br><span class="line">    private String code;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 指定i18n序列化类</span><br><span class="line">     */</span><br><span class="line">    @JsonSerialize(using = I18nJsonSerializer.class)</span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    public TestTranslateVO() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public TestTranslateVO(String code, String name) &#123;</span><br><span class="line">        this.code = code;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getCode() &#123;</span><br><span class="line">        return code;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setCode(String code) &#123;</span><br><span class="line">        this.code = code;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;TestTranslateVO&#123;&quot; +</span><br><span class="line">                &quot;code=&#x27;&quot; + code + &#x27;\&#x27;&#x27; +</span><br><span class="line">                &quot;, name=&#x27;&quot; + name + &#x27;\&#x27;&#x27; +</span><br><span class="line">                &#x27;&#125;&#x27;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> *  @description: 通过接口测试i18n</span><br><span class="line"> *  @author: rookie0peng</span><br><span class="line"> *  @date: 2021/1/20 13:07</span><br><span class="line"> *  &lt;/pre&gt;</span><br><span class="line"> */</span><br><span class="line">@Api(tags = &quot;测试接口-作者:rookie0peng&quot;)</span><br><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;test&quot;)</span><br><span class="line">public class TestController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private MessageSource messageSource;</span><br><span class="line"></span><br><span class="line">    @ApiOperation(value = &quot;随便打印数据&quot;)</span><br><span class="line">    @RequestMapping(path = &quot;console&quot;, method = RequestMethod.POST)</span><br><span class="line">    public Map&lt;String, String&gt; console() &#123;</span><br><span class="line">        Map&lt;String, String&gt; map = new LinkedHashMap&lt;&gt;();</span><br><span class="line">        //1.测试无参替换</span><br><span class="line">        map.put(&quot;test.name&quot;, messageSource.getMessage(&quot;test.name&quot;, null, LocaleContextHolder.getLocale()));</span><br><span class="line">        //2.测试字符串参数替换</span><br><span class="line">        Object[] stringParam = new Object[] &#123;&quot;1&quot;&#125;;</span><br><span class="line">        map.put(&quot;test.string&quot;, messageSource.getMessage(&quot;test.string&quot;, stringParam, LocaleContextHolder.getLocale()));</span><br><span class="line">        //3.测试日期参数替换</span><br><span class="line">        Object[] dateParam = new Object[] &#123;new Date()&#125;;</span><br><span class="line">        map.put(&quot;test.date&quot;, messageSource.getMessage(&quot;test.date&quot;, dateParam, LocaleContextHolder.getLocale()));</span><br><span class="line">        //3.测试时间参数替换</span><br><span class="line">        Object[] timeParam = new Object[] &#123;new Date()&#125;;</span><br><span class="line">        map.put(&quot;test.time&quot;, messageSource.getMessage(&quot;test.time&quot;, timeParam, LocaleContextHolder.getLocale()));</span><br><span class="line">        return map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @ApiOperation(value = &quot;测试自定义i18n&quot;)</span><br><span class="line">    @RequestMapping(path = &quot;test/custom-i18n&quot;, method = RequestMethod.POST)</span><br><span class="line">    public List&lt;TestTranslateVO&gt; testCustomI18n() &#123;</span><br><span class="line">        //test.key1和test.key2在LanguageDataComponentImpl.getLanguageDataFromDatabase方法中定义了</span><br><span class="line">        //test.key3用来测试不翻译的场景</span><br><span class="line">        return ListUtil.newArrayList(</span><br><span class="line">                new TestTranslateVO(&quot;test.key1&quot;, &quot;test.key1&quot;),</span><br><span class="line">                new TestTranslateVO(&quot;test.key2&quot;, &quot;test.key2&quot;),</span><br><span class="line">                new TestTranslateVO(&quot;test.key3&quot;, &quot;test.key3&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-4-测试自定义i18n"><a href="#2-4-测试自定义i18n" class="headerlink" title="2-4.测试自定义i18n"></a>2-4.测试自定义i18n</h5><p>启动项目后，查看调用<strong>test&#x2F;custom-i18n</strong>接口返回的数据，调用三次，分别设置header中的语言：默认、中文、英文。<br>笔者用的是idea的HTTP Client，以下是请求参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">### 默认——测试自定义i18n</span><br><span class="line">POST &#123;&#123;baseUrl&#125;&#125;/test/test/custom-i18n</span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">### 中文——测试自定义i18n</span><br><span class="line">POST &#123;&#123;baseUrl&#125;&#125;/test/test/custom-i18n</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">### 英文——测试自定义i18n</span><br><span class="line">POST &#123;&#123;baseUrl&#125;&#125;/test/test/custom-i18n</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Accept-Language: en;q=0.9</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下是返回参数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;code&quot;: &quot;test.key1&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;这是第一个值&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;code&quot;: &quot;test.key2&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;这是第二个值&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;code&quot;: &quot;test.key3&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;test.key3&quot;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;code&quot;: &quot;test.key1&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;这是第一个值&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;code&quot;: &quot;test.key2&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;这是第二个值&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;code&quot;: &quot;test.key3&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;test.key3&quot;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;code&quot;: &quot;test.key1&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;the first value&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;code&quot;: &quot;test.key2&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;the second value&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;code&quot;: &quot;test.key3&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;test.key3&quot;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-5-分析执行结果"><a href="#2-5-分析执行结果" class="headerlink" title="2-5.分析执行结果"></a>2-5.分析执行结果</h5><ul>
+<li>2-5-1.<strong>测试默认</strong>和<strong>测试中文</strong>的响应数据是一样的，可以确定系统默认使用的中文环境。</li>
+<li>2-5-2.对于使用了@JsonSerialize(using &#x3D; I18nJsonSerializer.class)注解的属性，会根据key自动替换成对应的值。</li>
+<li>2-5-3.根据key没找到值时，还是会使用原本的key。</li>
+</ul>
+<h5 id="2-6-结论"><a href="#2-6-结论" class="headerlink" title="2-6.结论"></a>2-6.结论</h5><p>这里只是简单的演示了自定义i18n的功能，但是已然支持用户新增语言、自定义翻译后的值、多机部署等。如果想要支持正则替换、递归翻译也可以自行扩展。</p>
+<h3 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h3><p>这里演示了两种i18n的实现方案，具体想用哪种就见仁见智了。图方便，开箱即用，那就选spring i18n；图灵活，可扩展性强，那就选自定义i18n。自然，肯定还有很多我没想到的方案，如果可以的话，欢迎大家在评论区指点。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>[1] <a target="_blank" rel="noopener" href="https://www.w3.org/International/questions/qa-i18n">“Localization vs. Internationalization”.W3C</a></li>
+</ul>
+<p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/11/19/2020/11/%E5%80%9F%E9%92%B1/" rel="prev" title="借钱">
+                  <i class="fa fa-angle-left"></i> 借钱
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/11/19/2024/%E5%80%9F%E9%92%B12/" rel="next" title="借钱2 (测试用)">
+                  借钱2 (测试用) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Bruce Boron(rookie0peng)</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"en","enable":true,"serverURL":"blog-v2-theta-seven.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2021/07/15/2021/07/%E5%A4%9A%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8D%87%E7%BA%A7%E4%B9%8B%E8%B7%AF/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+</body>
+</html>

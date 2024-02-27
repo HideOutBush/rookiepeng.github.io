@@ -1,32 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>git bash配置代理</title>
-    <url>/2020/11/19/2020/11/git-bash%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<h3 id="1-https加速"><a href="#1-https加速" class="headerlink" title="1.https加速"></a>1.https加速</h3><h5 id="1-1-当代理为http或https时"><a href="#1-1-当代理为http或https时" class="headerlink" title="1-1.当代理为http或https时"></a>1-1.当代理为http或https时</h5><p>1080为代理端口号。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line">git config --global https.proxy https://127.0.0.1:1080</span><br></pre></td></tr></table></figure>
-
-<h5 id="1-2-当代理为ss或ssr时"><a href="#1-2-当代理为ss或ssr时" class="headerlink" title="1-2.当代理为ss或ssr时"></a>1-2.当代理为ss或ssr时</h5><p>注意，得确认自己的代理使用的是哪个协议，哪个端口，比如我的就是 socks5 和 1080，以及端口号。</p>
-<span id="more"></span>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global http.proxy &#x27;socks5://127.0.0.1:1080&#x27;</span><br><span class="line">git config --global https.proxy &#x27;socks5://127.0.0.1:1080&#x27;</span><br></pre></td></tr></table></figure>
-<h5 id="1-3-重置代理"><a href="#1-3-重置代理" class="headerlink" title="1-3.重置代理"></a>1-3.重置代理</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global --unset http.proxy</span><br><span class="line">git config --global --unset https.proxy</span><br></pre></td></tr></table></figure>
-<h3 id="2-ssl加速"><a href="#2-ssl加速" class="headerlink" title="2.ssl加速"></a>2.ssl加速</h3><p>在用户文件夹下，打开&#x2F;.ssh&#x2F;config文件（如果没有就自己创建一个），输入以下内容。其中 id_rsa 文件需要换成你的文件，端口号 1080 也需要换成你的代理端口号。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">User git</span><br><span class="line">Port 443</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">IdentityFile ~\.ssh\id_rsa</span><br><span class="line">TCPKeepAlive yes</span><br><span class="line">ProxyCommand connect -S 127.0.0.1:1080 %h %p</span><br></pre></td></tr></table></figure>
-<p>如果使用Socks5代理，这时候测试可能会出现以下报错</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FATAL: Cannot get password for user:xxx</span><br></pre></td></tr></table></figure>
-<p>原因是代理需要密码，需要设置一个环境变量SOCKS5_PASSWD。如果你的代理里没有设置用户名和密码的话随便填即可。<br>比如我的：<br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/27260163e0ca42359660bc6c768963ac.png" alt="图 2-1.png"></p>
-]]></content>
-      <categories>
-        <category>program</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>借钱2 (测试用)</title>
-    <url>/2023/11/19/2024/%E5%80%9F%E9%92%B12/</url>
+    <url>/2023/11/19/2024/borrow_money_2/</url>
     <content><![CDATA[<p>走在去健身房的路上，突然一短发背着双肩包的男子走了过来。</p>
 <p>男子：你好，可以借我十几块钱坐公交吗？我找工作把钱花光了。</p>
 <p>我：啊？（我有点懵，为啥这么多人不问，偏偏问我。）</p>
@@ -43,43 +19,29 @@
       </tags>
   </entry>
   <entry>
-    <title>mysql字符串字段的字符集不同可能会导致索引不生效</title>
-    <url>/2020/11/17/2020/11/mysql%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E6%AE%B5%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86%E4%B8%8D%E5%90%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E7%B4%A2%E5%BC%95%E4%B8%8D%E7%94%9F%E6%95%88/</url>
-    <content><![CDATA[<p>前言，在探索这个问题之前，我们需要了解 mysql 的一个基本概念。mysql 有三种数据类型，数值型、字符串型、日期型，其中字符串类型需要设置字符集。如果不设置，在创建表结构的时候会默认使用数据库的字符集。</p>
-<h3 id="1-准备两个测试表（test-a-test-b）。"><a href="#1-准备两个测试表（test-a-test-b）。" class="headerlink" title="1.准备两个测试表（test_a, test_b）。"></a>1.准备两个测试表（test_a, test_b）。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `test_a` (</span><br><span class="line">  `id` bigint NOT NULL COMMENT &#x27;主键编号&#x27;,</span><br><span class="line">  `test_bigint` bigint DEFAULT NULL COMMENT &#x27;utf8的bigint&#x27;,</span><br><span class="line">  `test_varchar_utf8` varchar(255) DEFAULT NULL COMMENT &#x27;utf8的varchar&#x27;,</span><br><span class="line">  `test_varchar_utf8mb4` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;utf8mb4的varchar&#x27;,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `idx_test_bigint` (`test_bigint`) USING BTREE COMMENT &#x27;test_bigint索引&#x27;,</span><br><span class="line">  KEY `idx_test_varchar_utf8` (`test_varchar_utf8`) USING BTREE COMMENT &#x27;test_varchar_utf8索引&#x27;,</span><br><span class="line">  KEY `idx_test_varchar_utf8mb4` (`test_varchar_utf8mb4`) USING BTREE COMMENT &#x27;test_varchar_utf8mb4索引&#x27;</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">CREATE TABLE `test_b` (</span><br><span class="line">  `id` bigint NOT NULL COMMENT &#x27;主键编号&#x27;,</span><br><span class="line">  `test_bigint` bigint DEFAULT NULL COMMENT &#x27;utf8的bigint&#x27;,</span><br><span class="line">  `test_varchar_utf8` varchar(255) DEFAULT NULL COMMENT &#x27;utf8的varchar&#x27;,</span><br><span class="line">  `test_varchar_utf8mb4` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;utf8的varchar&#x27;,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `idx_test_bigint` (`test_bigint`) USING BTREE COMMENT &#x27;test_bigint索引&#x27;,</span><br><span class="line">  KEY `idx_test_varchar_utf8` (`test_varchar_utf8`) USING BTREE COMMENT &#x27;test_varchar_utf8索引&#x27;,</span><br><span class="line">  KEY `idx_test_varchar_utf8mb4` (`test_varchar_utf8mb4`) USING BTREE COMMENT &#x27;test_varchar_utf8mb4索引&#x27;</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
-
+    <title>借钱</title>
+    <url>/2020/11/19/2020/11/borror_money/</url>
+    <content><![CDATA[<p>走在去健身房的路上，突然一短发背着双肩包的男子走了过来。</p>
+<p>男子：你好，可以借我十几块钱坐公交吗？我找工作把钱花光了。</p>
+<p>我：啊？（我有点懵，为啥这么多人不问，偏偏问我。）</p>
+<p>男子看我疑惑的的表情，又复述了一遍刚刚话。</p>
+<p>男子：我找工作把钱花光了，可以借我十几块钱坐公交吗？</p>
 <span id="more"></span>
 
-<p><strong>注意：这两个表的 test_varchar_utf8 字段使用的是utf8字符集，test_varchar_utf8mb4 字段使用的是 utf8mb4 字符集。mysql 的 utf8 使用最大3字节长度来编码字符，而 utf8mb4 是使用最大4字节长度编码字符，可以理解为 utf8mb4 是 utf8 的超集。</strong></p>
-<h3 id="2-插入几条测试数据"><a href="#2-插入几条测试数据" class="headerlink" title="2.插入几条测试数据"></a>2.插入几条测试数据</h3><p>在 test_a 表中插入一条数据，在 test_b 表中插入10条数据。多少条数据无所谓，只需要能达到测试效果即可。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">INSERT INTO `test_a`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (1, 1, &#x27;1&#x27;, &#x27;1&#x27;);</span><br><span class="line"></span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (1, 1, &#x27;1&#x27;, &#x27;1&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (2, 2, &#x27;2&#x27;, &#x27;2&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (3, 3, &#x27;3&#x27;, &#x27;3&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (4, 4, &#x27;4&#x27;, &#x27;4&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (5, 5, &#x27;5&#x27;, &#x27;5&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (6, 6, &#x27;6&#x27;, &#x27;6&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (7, 7, &#x27;7&#x27;, &#x27;7&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (8, 8, &#x27;8&#x27;, &#x27;8&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (9, 9, &#x27;9&#x27;, &#x27;9&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (10, 10, &#x27;10&#x27;, &#x27;10&#x27;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-准备测试的-sql-语句，并执行"><a href="#3-准备测试的-sql-语句，并执行" class="headerlink" title="3.准备测试的 sql 语句，并执行"></a>3.准备测试的 sql 语句，并执行</h3><p>通过 test_a 表的数据关联查询 test_b 表的数据。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 测试非字符串类型的查询</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_bigint = ta.test_bigint WHERE ta.test_bigint = 1;</span><br><span class="line">-- 测试字符串类型，使用utf8编码的字段查询utf8编码的字段</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_varchar_utf8 = ta.test_varchar_utf8 WHERE ta.test_varchar_utf8 = &#x27;1&#x27;;</span><br><span class="line">-- 测试字符串类型，使用utf8mb4编码的字段查询utf8编码的字段</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_varchar_utf8 = ta.test_varchar_utf8mb4 WHERE ta.test_varchar_utf8 = &#x27;1&#x27;;</span><br><span class="line">-- 测试字符串类型，使用utf8编码的字段查询utf8mb4编码的字段</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_varchar_utf8mb4 = ta.test_varchar_utf8 WHERE ta.test_varchar_utf8 = &#x27;1&#x27;;</span><br><span class="line">-- 测试字符串类型，使用utf8mb4编码的字段查询utf8mb4编码的字段</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_varchar_utf8mb4 = ta.test_varchar_utf8mb4 WHERE ta.test_varchar_utf8 = &#x27;1&#x27;;</span><br></pre></td></tr></table></figure>
-<p>以下是执行结果</p>
-<p><strong>结果1：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/d5d1c78846aa4832882f2e75b5523f2e.png" alt="图 3-1.png"><br><strong>结果2：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/8ce85144b90144a3b63cf31b33281692.png" alt="图 3-2.png"><br><strong>结果3：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/f70177102e47452c93de9664b78059aa.png" alt="图 3-3.png"><br><strong>结果4：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/9638030ad8374fd8b8e62c7cbb062b2a.png" alt="图 3-4.png"><br><strong>结果5：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/d07ae072b3814f7b9ae80163779130f9.png" alt="图 3-5.png"></p>
-<h3 id="4-分析执行结果"><a href="#4-分析执行结果" class="headerlink" title="4.分析执行结果"></a>4.分析执行结果</h3><h5 id="4-1-对于-table-ta-的查询始终是走索引的"><a href="#4-1-对于-table-ta-的查询始终是走索引的" class="headerlink" title="4-1.对于 table ta 的查询始终是走索引的"></a>4-1.对于 table ta 的查询始终是走索引的</h5><p>观察5个结果中 table ta 的 key 字段，都是有值的。这说明了在使用 where 条件显式查询时，不管目标字段的字符集是什么，都会在查询的过程中默认使用该字符集进行编译，然后就可以走索引。</p>
-<h5 id="4-2-对于-table-tb-的查询，会因为字符集的不同导致不走索引"><a href="#4-2-对于-table-tb-的查询，会因为字符集的不同导致不走索引" class="headerlink" title="4-2.对于 table tb 的查询，会因为字符集的不同导致不走索引"></a>4-2.对于 table tb 的查询，会因为字符集的不同导致不走索引</h5><p>观察5个结果中的 table tb 的 key 字段，只有结果3的 key 字段为 null，再看看结果3的查询语句，使用 utf8mb4 编码的字段查询 utf8 编码的字段，联想开篇提到的内容，utf8mb4 是 utf8 的超集，那我们使用 utf8mb4 编码的字段去查询 utf8 编码的字段会出现不兼容的情况，没法走索引。</p>
-<h5 id="4-3-对于-table-tb-的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。"><a href="#4-3-对于-table-tb-的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。" class="headerlink" title="4-3. 对于 table tb 的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。"></a>4-3. 对于 table tb 的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。</h5><p>观察第4条 sql 语句，使用 utf8 编码的字段查询 utf8mb4 编码的字段，再看它的执行结果，table tb的 key 字段是有值的，代表走了索引，联想开篇提到的内容，utf8mb4 是 utf8 的超集，那么就可以理解为啥字符集不同也可以走索引了。</p>
-<h3 id="5-结论"><a href="#5-结论" class="headerlink" title="5.结论"></a>5.结论</h3><p>mysql 字符串字段的字符集不同可能会导致索引不生效</p>
-<h3 id="6-建议"><a href="#6-建议" class="headerlink" title="6.建议"></a>6.建议</h3><p>为了方便使用，还是统一数据库字符集比较好。<br>如果没法修改字段的字符集的话，也可以使用强转字符集的方式，让字段走索引。我们将第3条sql语句按照下面的方式进行调整。</p>
-<h5 id="6-1-将-utf8-强转成-utf8mb4，不走索引"><a href="#6-1-将-utf8-强转成-utf8mb4，不走索引" class="headerlink" title="6-1.将 utf8 强转成 utf8mb4，不走索引"></a>6-1.将 utf8 强转成 utf8mb4，不走索引</h5><p>将 utf8 强转成 utf8mb4 时，需要设置字符集的排序规则</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON CONVERT(tb.test_varchar_utf8 USING utf8mb4) COLLATE utf8mb4_general_ci = ta.test_varchar_utf8mb4 WHERE ta.test_varchar_utf8mb4 = &#x27;1&#x27;;</span><br></pre></td></tr></table></figure>
-<p><strong>执行结果如下：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/7c6fd6a54f3c4024bf636d31e263d1cc.png" alt="图 6-1.png.png"><br>从图 6-1中可以看到，table tb 的 key 字段的值为 null，代表它没走索引。也就是说，将 utf8 强转成 utf8mb4，并不会走索引。</p>
-<h5 id="6-2-将-utf8mb4-强转成-utf8，走索引"><a href="#6-2-将-utf8mb4-强转成-utf8，走索引" class="headerlink" title="6-2.将 utf8mb4 强转成 utf8，走索引"></a>6-2.将 utf8mb4 强转成 utf8，走索引</h5><p>将 utf8mb4 强转成 utf8 时，不需要设置字符集的排序规则</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 测试字符串类型，通过utf8mb4查询utf8，将utf8mb4强转成utf8</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_varchar_utf8 = CONVERT(ta.test_varchar_utf8mb4 USING utf8) WHERE ta.test_varchar_utf8mb4 = &#x27;1&#x27;;</span><br></pre></td></tr></table></figure>
-<p><strong>执行结果如下：</strong><br><img src="https://blog-rookie0peng.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/1119/f4e77a4a665845468e22db0a871209da.png" alt="图 6-2.png"><br>从图 6-2中可见，table tb 的 key 字段是有值的，这代表它走了索引，完结撒花！</p>
-]]></content>
+<p>我：那个，前面100m就是地铁站，要不你去那找工作人员接济一下？</p>
+<p>男子低着头往相反方向走了，脸上带着失望。</p>
+<p align="right">2020-10-03</p>]]></content>
       <categories>
-        <category>program</category>
+        <category>essay</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
+        <tag>借钱</tag>
+        <tag>路人</tag>
       </tags>
   </entry>
   <entry>
     <title>借手机打电话</title>
-    <url>/2020/11/19/2020/11/%E5%80%9F%E6%89%8B%E6%9C%BA%E6%89%93%E7%94%B5%E8%AF%9D/</url>
+    <url>/2020/11/19/2020/11/borrow_mobile_phone/</url>
     <content><![CDATA[<p>我在店里吃完肠粉，玩手机时，一小孩走了过来，盯着我的手机看了会。</p>
 <p>小孩：叔叔，可以借我你的手机打个电话吗？</p>
 <p>我：啊？</p>
@@ -92,35 +54,172 @@
 <p>我：不客气！（面带微笑）</p>
 <p align="right">2020-10-02</p>]]></content>
       <categories>
-        <category>diary</category>
+        <category>essay</category>
       </categories>
       <tags>
-        <tag>little boy</tag>
+        <tag>社牛小孩</tag>
       </tags>
   </entry>
   <entry>
-    <title>借钱</title>
-    <url>/2020/11/19/2020/11/%E5%80%9F%E9%92%B1/</url>
-    <content><![CDATA[<p>走在去健身房的路上，突然一短发背着双肩包的男子走了过来。</p>
-<p>男子：你好，可以借我十几块钱坐公交吗？我找工作把钱花光了。</p>
-<p>我：啊？（我有点懵，为啥这么多人不问，偏偏问我。）</p>
-<p>男子看我疑惑的的表情，又复述了一遍刚刚话。</p>
-<p>男子：我找工作把钱花光了，可以借我十几块钱坐公交吗？</p>
+    <title>mysql字符串字段的字符集不同可能会导致索引不生效</title>
+    <url>/2020/11/17/2020/11/mysql_charset_lead_index_fail/</url>
+    <content><![CDATA[<p>前言，在探索这个问题之前，我们需要了解 mysql 的一个基本概念。mysql 有三种数据类型，数值型、字符串型、日期型，其中字符串类型需要设置字符集。如果不设置，在创建表结构的时候会默认使用数据库的字符集。</p>
+<h3 id="1-准备两个测试表（test-a-test-b）。"><a href="#1-准备两个测试表（test-a-test-b）。" class="headerlink" title="1.准备两个测试表（test_a, test_b）。"></a>1.准备两个测试表（test_a, test_b）。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `test_a` (</span><br><span class="line">  `id` bigint NOT NULL COMMENT &#x27;主键编号&#x27;,</span><br><span class="line">  `test_bigint` bigint DEFAULT NULL COMMENT &#x27;utf8的bigint&#x27;,</span><br><span class="line">  `test_varchar_utf8` varchar(255) DEFAULT NULL COMMENT &#x27;utf8的varchar&#x27;,</span><br><span class="line">  `test_varchar_utf8mb4` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;utf8mb4的varchar&#x27;,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `idx_test_bigint` (`test_bigint`) USING BTREE COMMENT &#x27;test_bigint索引&#x27;,</span><br><span class="line">  KEY `idx_test_varchar_utf8` (`test_varchar_utf8`) USING BTREE COMMENT &#x27;test_varchar_utf8索引&#x27;,</span><br><span class="line">  KEY `idx_test_varchar_utf8mb4` (`test_varchar_utf8mb4`) USING BTREE COMMENT &#x27;test_varchar_utf8mb4索引&#x27;</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">CREATE TABLE `test_b` (</span><br><span class="line">  `id` bigint NOT NULL COMMENT &#x27;主键编号&#x27;,</span><br><span class="line">  `test_bigint` bigint DEFAULT NULL COMMENT &#x27;utf8的bigint&#x27;,</span><br><span class="line">  `test_varchar_utf8` varchar(255) DEFAULT NULL COMMENT &#x27;utf8的varchar&#x27;,</span><br><span class="line">  `test_varchar_utf8mb4` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;utf8的varchar&#x27;,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `idx_test_bigint` (`test_bigint`) USING BTREE COMMENT &#x27;test_bigint索引&#x27;,</span><br><span class="line">  KEY `idx_test_varchar_utf8` (`test_varchar_utf8`) USING BTREE COMMENT &#x27;test_varchar_utf8索引&#x27;,</span><br><span class="line">  KEY `idx_test_varchar_utf8mb4` (`test_varchar_utf8mb4`) USING BTREE COMMENT &#x27;test_varchar_utf8mb4索引&#x27;</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
 
-<p>我：那个，前面100m就是地铁站，要不你去那找工作人员接济一下？</p>
-<p>男子低着头往相反方向走了，脸上带着失望。</p>
-<p align="right">2020-10-03</p>]]></content>
+<p><strong>注意：这两个表的 test_varchar_utf8 字段使用的是utf8字符集，test_varchar_utf8mb4 字段使用的是 utf8mb4 字符集。mysql 的 utf8 使用最大3字节长度来编码字符，而 utf8mb4 是使用最大4字节长度编码字符，可以理解为 utf8mb4 是 utf8 的超集。</strong></p>
+<h3 id="2-插入几条测试数据"><a href="#2-插入几条测试数据" class="headerlink" title="2.插入几条测试数据"></a>2.插入几条测试数据</h3><p>在 test_a 表中插入一条数据，在 test_b 表中插入10条数据。多少条数据无所谓，只需要能达到测试效果即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">INSERT INTO `test_a`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (1, 1, &#x27;1&#x27;, &#x27;1&#x27;);</span><br><span class="line"></span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (1, 1, &#x27;1&#x27;, &#x27;1&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (2, 2, &#x27;2&#x27;, &#x27;2&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (3, 3, &#x27;3&#x27;, &#x27;3&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (4, 4, &#x27;4&#x27;, &#x27;4&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (5, 5, &#x27;5&#x27;, &#x27;5&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (6, 6, &#x27;6&#x27;, &#x27;6&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (7, 7, &#x27;7&#x27;, &#x27;7&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (8, 8, &#x27;8&#x27;, &#x27;8&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (9, 9, &#x27;9&#x27;, &#x27;9&#x27;);</span><br><span class="line">INSERT INTO `test_b`(`id`, `test_bigint`, `test_varchar_utf8`, `test_varchar_utf8mb4`) VALUES (10, 10, &#x27;10&#x27;, &#x27;10&#x27;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-准备测试的-sql-语句，并执行"><a href="#3-准备测试的-sql-语句，并执行" class="headerlink" title="3.准备测试的 sql 语句，并执行"></a>3.准备测试的 sql 语句，并执行</h3><p>通过 test_a 表的数据关联查询 test_b 表的数据。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 测试非字符串类型的查询</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_bigint = ta.test_bigint WHERE ta.test_bigint = 1;</span><br><span class="line">-- 测试字符串类型，使用utf8编码的字段查询utf8编码的字段</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_varchar_utf8 = ta.test_varchar_utf8 WHERE ta.test_varchar_utf8 = &#x27;1&#x27;;</span><br><span class="line">-- 测试字符串类型，使用utf8mb4编码的字段查询utf8编码的字段</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_varchar_utf8 = ta.test_varchar_utf8mb4 WHERE ta.test_varchar_utf8 = &#x27;1&#x27;;</span><br><span class="line">-- 测试字符串类型，使用utf8编码的字段查询utf8mb4编码的字段</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_varchar_utf8mb4 = ta.test_varchar_utf8 WHERE ta.test_varchar_utf8 = &#x27;1&#x27;;</span><br><span class="line">-- 测试字符串类型，使用utf8mb4编码的字段查询utf8mb4编码的字段</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_varchar_utf8mb4 = ta.test_varchar_utf8mb4 WHERE ta.test_varchar_utf8 = &#x27;1&#x27;;</span><br></pre></td></tr></table></figure>
+<p>以下是执行结果</p>
+<p><strong>结果1：</strong><br><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/11/d5d1c78846aa4832882f2e75b5523f2e.png" alt="图 3-1.png"><br><strong>结果2：</strong><br><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/11/8ce85144b90144a3b63cf31b33281692.png" alt="图 3-2.png"><br><strong>结果3：</strong><br><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/11/f70177102e47452c93de9664b78059aa.png" alt="图 3-3.png"><br><strong>结果4：</strong><br><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/11/9638030ad8374fd8b8e62c7cbb062b2a.png" alt="图 3-4.png"><br><strong>结果5：</strong><br><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/11/d07ae072b3814f7b9ae80163779130f9.png" alt="图 3-5.png"></p>
+<h3 id="4-分析执行结果"><a href="#4-分析执行结果" class="headerlink" title="4.分析执行结果"></a>4.分析执行结果</h3><h5 id="4-1-对于-table-ta-的查询始终是走索引的"><a href="#4-1-对于-table-ta-的查询始终是走索引的" class="headerlink" title="4-1.对于 table ta 的查询始终是走索引的"></a>4-1.对于 table ta 的查询始终是走索引的</h5><p>观察5个结果中 table ta 的 key 字段，都是有值的。这说明了在使用 where 条件显式查询时，不管目标字段的字符集是什么，都会在查询的过程中默认使用该字符集进行编译，然后就可以走索引。</p>
+<h5 id="4-2-对于-table-tb-的查询，会因为字符集的不同导致不走索引"><a href="#4-2-对于-table-tb-的查询，会因为字符集的不同导致不走索引" class="headerlink" title="4-2.对于 table tb 的查询，会因为字符集的不同导致不走索引"></a>4-2.对于 table tb 的查询，会因为字符集的不同导致不走索引</h5><p>观察5个结果中的 table tb 的 key 字段，只有结果3的 key 字段为 null，再看看结果3的查询语句，使用 utf8mb4 编码的字段查询 utf8 编码的字段，联想开篇提到的内容，utf8mb4 是 utf8 的超集，那我们使用 utf8mb4 编码的字段去查询 utf8 编码的字段会出现不兼容的情况，没法走索引。</p>
+<h5 id="4-3-对于-table-tb-的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。"><a href="#4-3-对于-table-tb-的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。" class="headerlink" title="4-3. 对于 table tb 的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。"></a>4-3. 对于 table tb 的查询，如果目标字段的字符集可以兼容源字段的字符集，还是可以走索引。</h5><p>观察第4条 sql 语句，使用 utf8 编码的字段查询 utf8mb4 编码的字段，再看它的执行结果，table tb的 key 字段是有值的，代表走了索引，联想开篇提到的内容，utf8mb4 是 utf8 的超集，那么就可以理解为啥字符集不同也可以走索引了。</p>
+<h3 id="5-结论"><a href="#5-结论" class="headerlink" title="5.结论"></a>5.结论</h3><p>mysql 字符串字段的字符集不同可能会导致索引不生效</p>
+<h3 id="6-建议"><a href="#6-建议" class="headerlink" title="6.建议"></a>6.建议</h3><p>为了方便使用，还是统一数据库字符集比较好。<br>如果没法修改字段的字符集的话，也可以使用强转字符集的方式，让字段走索引。我们将第3条sql语句按照下面的方式进行调整。</p>
+<h5 id="6-1-将-utf8-强转成-utf8mb4，不走索引"><a href="#6-1-将-utf8-强转成-utf8mb4，不走索引" class="headerlink" title="6-1.将 utf8 强转成 utf8mb4，不走索引"></a>6-1.将 utf8 强转成 utf8mb4，不走索引</h5><p>将 utf8 强转成 utf8mb4 时，需要设置字符集的排序规则</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON CONVERT(tb.test_varchar_utf8 USING utf8mb4) COLLATE utf8mb4_general_ci = ta.test_varchar_utf8mb4 WHERE ta.test_varchar_utf8mb4 = &#x27;1&#x27;;</span><br></pre></td></tr></table></figure>
+<p><strong>执行结果如下：</strong><br><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/11/7c6fd6a54f3c4024bf636d31e263d1cc.png" alt="图 6-1.png"><br>从图 6-1中可以看到，table tb 的 key 字段的值为 null，代表它没走索引。也就是说，将 utf8 强转成 utf8mb4，并不会走索引。</p>
+<h5 id="6-2-将-utf8mb4-强转成-utf8，走索引"><a href="#6-2-将-utf8mb4-强转成-utf8，走索引" class="headerlink" title="6-2.将 utf8mb4 强转成 utf8，走索引"></a>6-2.将 utf8mb4 强转成 utf8，走索引</h5><p>将 utf8mb4 强转成 utf8 时，不需要设置字符集的排序规则</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 测试字符串类型，通过utf8mb4查询utf8，将utf8mb4强转成utf8</span><br><span class="line">EXPLAIN SELECT * FROM test_a ta INNER JOIN test_b tb ON tb.test_varchar_utf8 = CONVERT(ta.test_varchar_utf8mb4 USING utf8) WHERE ta.test_varchar_utf8mb4 = &#x27;1&#x27;;</span><br></pre></td></tr></table></figure>
+<p><strong>执行结果如下：</strong><br><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/11/f4e77a4a665845468e22db0a871209da.png" alt="图 6-2.png"><br>从图 6-2中可见，table tb 的 key 字段是有值的，这代表它走了索引，完结撒花！</p>
+]]></content>
       <categories>
-        <category>diary</category>
+        <category>program</category>
       </categories>
       <tags>
-        <tag>passerby</tag>
+        <tag>mysql</tag>
+        <tag>字符集</tag>
       </tags>
   </entry>
   <entry>
-    <title>多语言翻译组件的升级之路</title>
-    <url>/2021/07/15/2021/07/%E5%A4%9A%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8D%87%E7%BA%A7%E4%B9%8B%E8%B7%AF/</url>
+    <title>git bash配置代理</title>
+    <url>/2020/11/19/2020/11/git_bash_proxy/</url>
+    <content><![CDATA[<h3 id="1-https加速"><a href="#1-https加速" class="headerlink" title="1.https加速"></a>1.https加速</h3><h5 id="1-1-当代理为http或https时"><a href="#1-1-当代理为http或https时" class="headerlink" title="1-1.当代理为http或https时"></a>1-1.当代理为http或https时</h5><p>1080为代理端口号。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line">git config --global https.proxy https://127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+
+<h5 id="1-2-当代理为ss或ssr时"><a href="#1-2-当代理为ss或ssr时" class="headerlink" title="1-2.当代理为ss或ssr时"></a>1-2.当代理为ss或ssr时</h5><p>注意，得确认自己的代理使用的是哪个协议，哪个端口，比如我的就是 socks5 和 1080，以及端口号。</p>
+<span id="more"></span>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global http.proxy &#x27;socks5://127.0.0.1:1080&#x27;</span><br><span class="line">git config --global https.proxy &#x27;socks5://127.0.0.1:1080&#x27;</span><br></pre></td></tr></table></figure>
+<h5 id="1-3-重置代理"><a href="#1-3-重置代理" class="headerlink" title="1-3.重置代理"></a>1-3.重置代理</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global --unset http.proxy</span><br><span class="line">git config --global --unset https.proxy</span><br></pre></td></tr></table></figure>
+<h3 id="2-ssl加速"><a href="#2-ssl加速" class="headerlink" title="2.ssl加速"></a>2.ssl加速</h3><p>在用户文件夹下，打开&#x2F;.ssh&#x2F;config文件（如果没有就自己创建一个），输入以下内容。其中 id_rsa 文件需要换成你的文件，端口号 1080 也需要换成你的代理端口号。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">User git</span><br><span class="line">Port 443</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">IdentityFile ~\.ssh\id_rsa</span><br><span class="line">TCPKeepAlive yes</span><br><span class="line">ProxyCommand connect -S 127.0.0.1:1080 %h %p</span><br></pre></td></tr></table></figure>
+<p>如果使用Socks5代理，这时候测试可能会出现以下报错</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FATAL: Cannot get password for user:xxx</span><br></pre></td></tr></table></figure>
+<p>原因是代理需要密码，需要设置一个环境变量SOCKS5_PASSWD。如果你的代理里没有设置用户名和密码的话随便填即可。<br>比如我的：<br><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2020/11/27260163e0ca42359660bc6c768963ac.png" alt="图 2-1.png"></p>
+]]></content>
+      <categories>
+        <category>program</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>proxy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一次巧合——梦境与现实</title>
+    <url>/2024/02/27/2024/02/a_coincidence/</url>
+    <content><![CDATA[<p>有一天晚上，做了一个很奇怪的梦，梦到了一个球友脚崴了，然后我背着他走了一段路。</p>
+<p>接着我忍不住问他，你对象呢，她怎么不来接你。</p>
+<p>他沉默了，默默的走开了。</p>
+<p>梦醒了，很平淡的一个梦。</p>
+<p>第二天，正在上班，突然这个球友发消息来问我有没有什么 AI 工具推荐，当即把 GPT4 推荐给他。</p>
+<p><strong>巧合点：</strong></p>
+<ul>
+<li>上次和这个球友聊天是20天之前，并且那天晚上思想中没有出现过这个球友的任何事情。</li>
+<li>梦到之后，第二天竟然碰到他发消息过来。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>巧合</category>
+      </categories>
+      <tags>
+        <tag>巧合</tag>
+        <tag>梦境与现实</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 WildCard 开通 GPT4 (Use WildCard to Subscribe GPT4)</title>
+    <url>/2024/01/28/2024/01/use_wildcard_to_subscribe_gpt4/</url>
+    <content><![CDATA[<h1 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h1><p>今天逛知乎时，突然看到有个文章，说有两种方法可以开通 GPT4。</p>
+<ul>
+<li>使用 Apple App Store 可以开通 GPT4，但是新用户没法开通，因为不开放这个入口了。</li>
+<li>使用 WildCard 可以开通 GPT4。</li>
+</ul>
+<p>抱着试一试的心态，尝试了下 WildCard，真的开通成功了。</p>
+<h1 id="如何开通"><a href="#如何开通" class="headerlink" title="如何开通"></a>如何开通</h1><p><strong>注意：开卡需要支付一定的费用，并且需要支付一定的手续费，请一定考虑清楚。</strong></p>
+<p>接下来简单介绍一下使用 WildCard 开通 GPT4 的过程。</p>
+<span id="more"></span>
+
+<ol>
+<li><p>先来到<a href="https://bewildcard.com/i/PENG244"> WildCard 的官网 </a>( <a href="https://bewildcard.com/i/PENG244">https://bewildcard.com/i/PENG244</a> )。</p>
+<p> <img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2024/01/WildCard-Official-Website.png" alt="图 1 WildCard 官网.png"></p>
+</li>
+<li><p>点击 <strong>Started</strong> 按钮。</p>
+<p> <img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2024/01/WildCard-Official-Website-ClickStarted.png" alt="图 2 ClickStarted.png"></p>
+</li>
+<li><p>来到开卡页面，点击 <strong>I understand, open card now</strong> 按钮。</p>
+<p> <img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2024/01/WildCard-Official-Website-OpenCardNow.png" alt="图 3 OpenCardNow.png"></p>
+</li>
+<li><p>来到手机号注册页面，这里的邀请码（Invitation Code）可以写我的这个（<strong>PENG244</strong>），感谢。注册完之后还需要使用支付宝进行人脸识别，设置登录密码、支付密码，最后支付开卡费用。</p>
+<p> <img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2024/01/WildCard-Official-Website-EnterYourPhoneNumber.png" alt="图 4 EnterYourPhoneNumber.png"></p>
+</li>
+<li><p>如果已经注册完，并且开好卡了，按照以下图中步骤来到升级 GPT4 的页面。</p>
+<p><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2024/01/WildCard-Official-Website-UpgradeChatGPT.png" alt="图 5 UpgradeChatGPT.png"></p>
+</li>
+<li><p>注意看提示信息，最好别使用微软邮箱，风险高，很容易被封号，封号了钱是不给退的。如果邮箱符合要求则点击 <strong>My email account meets the requirements</strong> 按钮。<br>否则，要么使用一个符合要求的邮箱去注册新的 openai 账号；要么点击 <strong>Recommended Overseas Email Registration</strong> 按钮，然后使用 WildCard 推荐的海外邮箱去一键注册并开通 ChatGPT4。</p>
+<p><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2024/01/WildCard-Official-Website-AvoidEmail.png" alt="图 6 AvoidEmail.png"></p>
+</li>
+<li><p>先充值至少 20 美元到 WildCard 账户（注意，这里的充值也是要收手续费的），按照下图中的步骤，点击 ChatGPT 中的 <strong>Upgrade</strong> 按钮，选择 <strong>Upgrade Plan</strong>。<br>来到付款页面后，将付款页面的链接全选复制，并粘贴到 WildCard 的 <strong>Confirm</strong> 按钮上方的输入框中。顺利的话，等个 3-5 分钟，GPT4 就开通成功了，如果开通失败的话，钱是不会花掉，换个新的 openai 账号再试试，祝君成功。</p>
+<p><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2024/01/WildCard-Official-Website-FollowStepToUpgrade.png" alt="图 7 FollowStepToUpgrade.png"></p>
+</li>
+<li><p>最后给大家看看我的 openai 账号。</p>
+<p><img src="https://blog-bruceboron.oss-cn-shenzhen.aliyuncs.com/github/pages/2024/01/openai-GPT4.png" alt="图 8 FollowStepToUpgrade.png"></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>openai</category>
+      </categories>
+      <tags>
+        <tag>GPT4</tag>
+        <tag>openai</tag>
+        <tag>WildCard</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>前司领导找我要本司的产品设计方案 哈哈 若只</title>
+    <url>/2024/01/16/2024/01/ask_product_design_scheme/</url>
+    <content><![CDATA[<p>在一个平平无奇的早上，我一边摸着鱼，一边整理着需求。</p>
+<p>忽然，有个前同事发消息过来，说前领导找我要本司的部分<strong>产品设计方案</strong>和<strong>产品研发流程</strong>。</p>
+<p>（是的，我都没有前领导的好友，前领导通过前同事联系的我。）</p>
+<span id="more"></span>
+
+<p>俺寻思着，你 tm 秀逗了吧，老子跟你关系有这么好吗，凭啥给你啊，你又没给老子发工资。真是乌龟办走读，憋（鳖）不住笑（校）了。</p>
+<p>本着不撕破脸的原则，我回了个“简单的很”。</p>
+<p>前同事一眼就明白了拒绝的意思，并传话给前领导。前领导仿佛听不懂人话，丝毫看不出拒绝，问我能不能快点给，还蹬鼻子上脸说<strong>顺便录个视频吧</strong>。</p>
+<p>真 tm 笑死，老子回你一句，你还真把自己当根葱了啊？蝙蝠上插鸡毛——你算什么鸟啊？一点 b 数都没有。</p>
+<p>几十号人的研发团队，这点事都做不到吗，就你这 b 样，也能混成领导？哪凉快哪待着去，别来恶心老子。</p>
+<p>老子当初一个人干几个人的活，也没给几个钱，现在还想白嫖老子，你是若只吗？滚！！！有多远滚多远！</p>
+<p>(本故事改编自真实事件，来自一位朋友)</p>
+]]></content>
+      <categories>
+        <category>essay</category>
+      </categories>
+      <tags>
+        <tag>离谱</tag>
+        <tag>产品</tag>
+        <tag>前领导</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>自定义国际化功能</title>
+    <url>/2021/07/15/2021/07/customize_i18n/</url>
     <content><![CDATA[<p>国际化的定义各不相同。这是用于 W3C 国际化活动材料的高级工作定义。有些人使用其他术语（例如全球化）来指代同一概念。<br>国际化是产品、应用程序或文档内容的设计和开发，它可以为不同文化、地区或语言的目标受众轻松本地化。<br>国际化（Internationalization）通常用英文写成i18n，其中 18 是英文单词中i和n之间的字母数。<sup>[1]</sup></p>
 <p>本文主要基于java针对语言国际化进行阐述。</p>
 <p>任何一个面向全世界的软件都会面临多语言国际化的问题，对于java web应用，要实现国际化功能，就是在数据展示给用户之前，替换成对应的语言。</p>
